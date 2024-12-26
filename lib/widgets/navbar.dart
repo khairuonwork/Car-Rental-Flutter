@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../pages/about.dart';
 import '../pages/homepage.dart';
 import '../pages/contact.dart';
-import '../pages/services.dart';
 
 class Navbar extends StatelessWidget implements PreferredSizeWidget {
   const Navbar({Key? key}) : super(key: key);
@@ -13,13 +13,29 @@ class Navbar extends StatelessWidget implements PreferredSizeWidget {
     double screenWidth = MediaQuery.of(context).size.width;
 
     return AppBar(
-      title: const Text('Ksatria Rental'),
-      backgroundColor: Colors.orangeAccent,
-      titleTextStyle: const TextStyle(
-        fontSize: 22,
-        color: Colors.white,
-        fontWeight: FontWeight.bold,
+      title: InkWell(
+        onTap: () {
+          Navigator.pushReplacement(
+            context,
+            PageRouteBuilder(
+              pageBuilder: (context, animation1, animation2) =>
+                  const Homepage(),
+              transitionDuration: Duration.zero,
+              reverseTransitionDuration: Duration.zero,
+            ),
+          );
+        },
+        child: Text(
+          'Ksatria Rental',
+          style: GoogleFonts.ubuntu(
+            fontSize: 22,
+            color: Color.fromRGBO(
+                79, 74, 69, 1), // Alpha value should be 1 for full opacity
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
+      backgroundColor: Color.fromRGBO(237, 125, 49, 100),
       leading: null, // Remove the back button by setting leading to null
       actions: [
         // If screen width is less than 600px, show menu icon
@@ -32,46 +48,62 @@ class Navbar extends StatelessWidget implements PreferredSizeWidget {
                 position: const RelativeRect.fromLTRB(100, 60, 0, 0),
                 items: [
                   PopupMenuItem(
-                    child: const Text('Home'),
+                    child: Text(
+                      'Services',
+                      style: GoogleFonts.ubuntu(
+                          fontSize: 22,
+                          color: Color.fromRGBO(79, 74, 69, 1),
+                          fontWeight: FontWeight.w200),
+                    ),
                     onTap: () {
-                      Navigator.pushAndRemoveUntil(
+                      Navigator.pushReplacement(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) => const Homepage()),
-                        (route) => false, // Remove all routes from stack
+                        PageRouteBuilder(
+                          pageBuilder: (context, animation1, animation2) =>
+                              const Homepage(),
+                          transitionDuration: Duration.zero,
+                          reverseTransitionDuration: Duration.zero,
+                        ),
                       );
                     },
                   ),
                   PopupMenuItem(
-                    child: const Text('About'),
+                    child: Text(
+                      'About',
+                      style: GoogleFonts.ubuntu(
+                          fontSize: 22,
+                          color: Color.fromRGBO(79, 74, 69, 1),
+                          fontWeight: FontWeight.w200),
+                    ),
                     onTap: () {
-                      Navigator.pushAndRemoveUntil(
+                      Navigator.pushReplacement(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) => const AboutPage()),
-                        (route) => false, // Remove all routes from stack
+                        PageRouteBuilder(
+                          pageBuilder: (context, animation1, animation2) =>
+                              const AboutPage(),
+                          transitionDuration: Duration.zero,
+                          reverseTransitionDuration: Duration.zero,
+                        ),
                       );
                     },
                   ),
                   PopupMenuItem(
-                    child: const Text('Services'),
+                    child: Text(
+                      'Credits',
+                      style: GoogleFonts.ubuntu(
+                          fontSize: 22,
+                          color: Color.fromRGBO(79, 74, 69, 1),
+                          fontWeight: FontWeight.w200),
+                    ),
                     onTap: () {
-                      Navigator.pushAndRemoveUntil(
+                      Navigator.pushReplacement(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) => const ServicesPage()),
-                        (route) => false, // Remove all routes from stack
-                      );
-                    },
-                  ),
-                  PopupMenuItem(
-                    child: const Text('Contact'),
-                    onTap: () {
-                      Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const ContactPage()),
-                        (route) => false, // Remove all routes from stack
+                        PageRouteBuilder(
+                          pageBuilder: (context, animation1, animation2) =>
+                              const ContactPage(),
+                          transitionDuration: Duration.zero,
+                          reverseTransitionDuration: Duration.zero,
+                        ),
                       );
                     },
                   ),
@@ -84,10 +116,9 @@ class Navbar extends StatelessWidget implements PreferredSizeWidget {
         else
           Row(
             children: [
-              navButton(context, 'Home', const Homepage()),
+              navButton(context, 'Services', const Homepage()),
               navButton(context, 'About', const AboutPage()),
-              navButton(context, 'Services', const ServicesPage()),
-              navButton(context, 'Contact', const ContactPage()),
+              navButton(context, 'Credits', const ContactPage()),
             ],
           ),
       ],
@@ -100,15 +131,18 @@ class Navbar extends StatelessWidget implements PreferredSizeWidget {
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: TextButton(
         onPressed: () {
-          Navigator.pushAndRemoveUntil(
+          Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => page),
-            (route) => false, // Remove all routes from stack
+            PageRouteBuilder(
+              pageBuilder: (context, animation1, animation2) => page,
+              transitionDuration: Duration.zero,
+              reverseTransitionDuration: Duration.zero,
+            ),
           );
         },
         child: Text(
           text,
-          style: const TextStyle(
+          style: GoogleFonts.ubuntu(
             color: Colors.white,
             fontSize: 16,
           ),
