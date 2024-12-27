@@ -9,45 +9,52 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
-  // Variables to store the selected car type, car, and date
+  // Variables to store the selected car type, car, and dates
   String? _carType = 'Manual';
   String? _selectedCar;
-  DateTime _selectedDate = DateTime.now();
+  DateTime _pickupDate = DateTime.now();
+  DateTime _deliverBackDate = DateTime.now().add(Duration(days: 1));
 
   // List of available cars
   final List<String> manualCars = [
     'Toyota Corolla',
     'Honda Civic',
-    'Ford Focus',
+    'Toyota Innova',
   ];
 
   final List<String> automaticCars = [
     'Honda Accord',
-    'BMW 3 Series',
-    'Tesla Model 3',
+    'Toyota Avanza',
+    'Daihatsu Xenia',
   ];
 
   // Function to show the date picker
-  Future<void> _selectDate(BuildContext context) async {
+  Future<void> _selectDate(BuildContext context, bool isPickup) async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: _selectedDate,
+      initialDate: isPickup ? _pickupDate : _deliverBackDate,
       firstDate: DateTime(2024),
       lastDate: DateTime(2025),
     );
-    if (picked != null && picked != _selectedDate)
+    if (picked != null) {
       setState(() {
-        _selectedDate = picked;
+        if (isPickup) {
+          _pickupDate = picked;
+          if (_deliverBackDate.isBefore(_pickupDate)) {
+            _deliverBackDate = _pickupDate.add(Duration(days: 1));
+          }
+        } else {
+          _deliverBackDate = picked;
+        }
       });
+    }
   }
 
-  // Placeholder function to calculate the rental cost based on car type
+  // Function to calculate the rental cost
   double _calculateCost() {
-    if (_carType == 'Manual') {
-      return 50.0; // Example price for manual cars per day
-    } else {
-      return 80.0; // Example price for automatic cars per day
-    }
+    final int days = _deliverBackDate.difference(_pickupDate).inDays + 1;
+    final double pricePerDay = _carType == 'Manual' ? 300000.0 : 400000.0;
+    return pricePerDay * days;
   }
 
   @override
@@ -77,7 +84,8 @@ class _HomepageState extends State<Homepage> {
               ),
             ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.start,
+              spacing: 20,
               children: [
                 ChoiceChip(
                   label: Text('Manual'),
@@ -140,11 +148,11 @@ class _HomepageState extends State<Homepage> {
             ),
             const SizedBox(height: 20),
 
-            // Rental Date Picker
+            // Rental Dates
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 20),
               child: Text(
-                'Select Pickup Date',
+                'Select Dates',
                 style: TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
@@ -154,24 +162,33 @@ class _HomepageState extends State<Homepage> {
             ),
             ListTile(
               title: Text(
-                '${_selectedDate.toLocal()}'.split(' ')[0],
+                'Pickup Date: ${_pickupDate.toLocal()}'.split(' ')[0],
                 style: TextStyle(
                   fontSize: 18,
                   color: Color.fromRGBO(79, 74, 69, 1),
                 ),
               ),
               trailing: Icon(Icons.calendar_today),
-              onTap: () => _selectDate(context),
+              onTap: () => _selectDate(context, true),
+            ),
+            ListTile(
+              title: Text(
+                'Deliver Back Date: ${_deliverBackDate.toLocal()}'
+                    .split(' ')[0],
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Color.fromRGBO(79, 74, 69, 1),
+                ),
+              ),
+              trailing: Icon(Icons.calendar_today),
+              onTap: () => _selectDate(context, false),
             ),
             const SizedBox(height: 20),
 
             // Submit Button
             ElevatedButton(
               onPressed: () {
-                // Placeholder for submitting the rental form
-                setState(() {
-                  // Triggering state change to show the bill
-                });
+                setState(() {});
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Color.fromRGBO(79, 74, 69, 1),
@@ -200,28 +217,16 @@ class _HomepageState extends State<Homepage> {
                       ),
                     ),
                     const SizedBox(height: 10),
-                    Text(
-                      'Car Type: $_carType',
-                      style: TextStyle(
-                          fontSize: 18, color: Color.fromRGBO(79, 74, 69, 1)),
-                    ),
-                    Text(
-                      'Car: $_selectedCar',
-                      style: TextStyle(
-                          fontSize: 18, color: Color.fromRGBO(79, 74, 69, 1)),
-                    ),
-                    Text(
-                      'Pickup Date: ${_selectedDate.toLocal()}'.split(' ')[0],
-                      style: TextStyle(
-                          fontSize: 18, color: Color.fromRGBO(79, 74, 69, 1)),
-                    ),
+                    Text('Car Type: $_carType'),
+                    Text('Car: $_selectedCar'),
+                    Text('Pickup Date: ${_pickupDate.toLocal()}'.split(' ')[0]),
+                    Text('Deliver Back Date: ${_deliverBackDate.toLocal()}'
+                        .split(' ')[0]),
                     const SizedBox(height: 20),
                     Text(
-                      'Total Cost: \$${_calculateCost().toStringAsFixed(2)} per day',
-                      style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Color.fromRGBO(79, 74, 69, 1)),
+                      'Total Cost: Rp.${_calculateCost().toStringAsFixed(2)}',
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),

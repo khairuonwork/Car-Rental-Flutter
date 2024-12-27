@@ -18,6 +18,13 @@ class ContactPage extends StatelessWidget {
           children: [
             Padding(padding: EdgeInsets.all(20.0)),
             Text(
+              'Kelompok 4 - Car Rental Flutter Website',
+              style: GoogleFonts.ubuntu(
+                  fontSize: 26,
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold),
+            ),
+            Text(
               'Abizar Firmansyah (1203623038)',
               style: GoogleFonts.ubuntu(fontSize: 18, color: Colors.black),
             ),
