@@ -39,7 +39,7 @@ class Navbar extends StatelessWidget implements PreferredSizeWidget {
       leading: null, // Remove the back button by setting leading to null
       actions: [
         // If screen width is less than 600px, show menu icon
-        if (screenWidth < 600)
+        if (screenWidth < 900)
           IconButton(
             icon: const Icon(Icons.menu),
             onPressed: () {
